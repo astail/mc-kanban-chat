@@ -6,11 +6,11 @@
 
     <groupId>io.github.astail</groupId>
     <artifactId>kanban-chat</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
 
     <name>KanbanChat</name>
-    <description>指定した看板の内容を、ログイン時に本人のチャットへ流す掲示板プラグイン。</description>
+    <description>指定した看板の内容を、ログインした各プレイヤーのチャットに個別表示する掲示板プラグイン。</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

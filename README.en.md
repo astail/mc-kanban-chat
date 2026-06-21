@@ -1,8 +1,10 @@
 # KanbanChat
 
-A Paper plugin that shows the contents of a designated **sign** in a player's **chat when they log in** (server-side only).
+A Paper plugin that shows the contents of a designated **sign** in **each player's own chat as they log in** (server-side only).
 
 Manage your server's announcements, rules, or Discord invite from **signs placed in the world** instead of a config file. Edit the sign, and the new text is shown to everyone who logs in afterwards.
+
+> **Who sees it?** Not just the sign's author — **every player who logs in** (with `kanbanchat.see`) receives it, shown privately in their **own** chat the moment they log in (it is not a server-wide broadcast to everyone currently online).
 
 ## The problem it solves
 
@@ -15,7 +17,7 @@ KanbanChat treats signs as a bulletin board: **write on a sign → it shows on l
   - Command: look at a sign and run `/kanbanchat set` (all 4 lines usable as body text)
   - Marker: write `[login]` on the sign's first line to auto-register (no command, just place it)
 - **Multiple signs concatenated**: each sign has a number; signs are joined into one message in **ascending order**, so you can exceed a single sign's 4-line limit.
-- **Sent to the joining player only**, a few ticks after join (after the vanilla join message).
+- **Shown to each player individually on login**: regardless of who wrote the sign, **every** player who logs in receives it in their own chat (not a server-wide broadcast), a few ticks after join (after the vanilla join message).
 - **Formatting preserved**: sign dye colors / decorations carry over into chat.
 - **Auto-follows edits**: rewrite the sign and the body updates; break it and it is removed.
 - **Global ON/OFF**: pause or resume any time with `/kanbanchat on|off`.
@@ -28,9 +30,9 @@ KanbanChat treats signs as a bulletin board: **write on a sign → it shows on l
 
 ## Installation
 
-1. Drop `KanbanChat-1.0.0.jar` into `plugins/` and restart.
+1. Drop `KanbanChat-1.0.1.jar` into `plugins/` and restart.
 2. Place a sign and register it as a "login sign" with either method below.
-3. When a player logs in, the contents are shown in their chat.
+3. When a player logs in, the contents are shown in their own chat (every player who logs in).
 
 ## Usage
 
@@ -103,12 +105,75 @@ Registered signs are stored in `plugins/KanbanChat/signs.yml` (body text is cach
 ## Build
 
 ```bash
-./deploy.sh        # macOS native (JDK 25 + Maven). Output: target/KanbanChat-1.0.0.jar
+./deploy.sh        # macOS native (JDK 25 + Maven). Output: target/KanbanChat-1.0.1.jar
 # or
 mvn -B clean package
 ```
 
 Pushing a `v*` tag triggers GitHub Actions (`.github/workflows/build.yml`) to build and attach the jar to a release.
+
+## Deploying to a server
+
+Put the jar into your server's `plugins/` directory and restart. There are two ways (A/B) to obtain the jar. If you use Docker (itzg/minecraft-server), you can also use the "Docker Compose auto-download" method below.
+
+### A. Use a release build (no build needed, recommended)
+
+Download the latest `KanbanChat-<version>.jar` from [Releases](https://github.com/astail/mc-kanban-chat/releases). No JDK or Maven required.
+
+```bash
+# Download the latest release jar (with the gh CLI)
+gh release download --repo astail/mc-kanban-chat --pattern '*.jar'
+```
+
+### B. Build it yourself
+
+Follow [Build](#build) to produce `target/KanbanChat-1.0.1.jar`.
+
+### Place the jar
+
+Put the jar into the server's `plugins/` and restart.
+
+```bash
+# Bind mount (copy into the host plugins directory)
+cp target/KanbanChat-1.0.1.jar /path/to/data/plugins/
+docker restart <container>
+
+# Named volume etc. (copy directly into the container)
+docker cp target/KanbanChat-1.0.1.jar <container>:/data/plugins/
+docker restart <container>
+```
+
+### Docker Compose (itzg/minecraft-server) auto-download
+
+With the [`itzg/minecraft-server`](https://github.com/itzg/docker-minecraft-server) image, you don't even need the jar on hand — just **list the release URL in the `PLUGINS` environment variable** and it is downloaded into `plugins/` at startup.
+
+```yaml
+services:
+  mc:
+    image: itzg/minecraft-server
+    tty: true
+    stdin_open: true
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "PAPER"
+      VERSION: "26.2"
+      PAPER_CHANNEL: "experimental"
+      PLUGINS: |
+        https://github.com/astail/mc-kanban-chat/releases/download/v1.0.1/KanbanChat-1.0.1.jar
+    volumes:
+      - ./data:/data
+    restart: unless-stopped
+```
+
+`PLUGINS` accepts multiple newline-separated URLs. When you bump the version, update `v1.0.1` and the filename in the URL to match the new release.
+
+You'll know it worked when the startup log shows:
+
+```text
+[KanbanChat] KanbanChat を有効化しました（登録看板: 0 枚 / 状態: ON）。
+```
 
 ## License
 

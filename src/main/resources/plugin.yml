@@ -1,0 +1,22 @@
+name: KanbanChat
+version: 1.0.0
+main: io.github.astail.kanbanchat.KanbanChatPlugin
+description: "指定した看板に書いた内容を、プレイヤーのログイン時に本人のチャットへ流す掲示板プラグインです。"
+api-version: '26.1.2'
+author: astail
+
+commands:
+  kanbanchat:
+    description: "ログイン看板の登録・管理を行います。"
+    usage: "/kanbanchat <set|remove|list|test|reload|on|off|status>"
+    aliases: [kc]
+    permission: kanbanchat.admin
+    permission-message: "§cこのコマンドを実行する権限がありません。"
+
+permissions:
+  kanbanchat.see:
+    description: "ログイン時に看板メッセージを受け取ることを許可します。"
+    default: true
+  kanbanchat.admin:
+    description: "/kanbanchat で看板の登録・管理を行うことを許可します。"
+    default: op

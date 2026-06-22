@@ -43,9 +43,9 @@ public final class KanbanChatCommand implements CommandExecutor, TabCompleter {
             case "remove", "unset", "delete" -> requirePlayer(sender, player -> doRemove(player, args));
             case "list" -> doList(sender);
             case "test", "preview" -> doTest(sender);
-            case "reload" -> doReload(sender);
-            case "on" -> setActive(sender, true);
-            case "off" -> setActive(sender, false);
+            case "reload" -> { if (requireManage(sender)) doReload(sender); }
+            case "on" -> { if (requireManage(sender)) setActive(sender, true); }
+            case "off" -> { if (requireManage(sender)) setActive(sender, false); }
             case "status" -> sendStatus(sender);
             default -> sendUsage(sender);
         }
@@ -186,6 +186,14 @@ public final class KanbanChatCommand implements CommandExecutor, TabCompleter {
 
     // ───────────── 補助 ─────────────
 
+    private boolean requireManage(CommandSender sender) {
+        if (sender.hasPermission("kanbanchat.manage")) {
+            return true;
+        }
+        sender.sendMessage(error("この操作（on / off / reload）はサーバー管理者のみ実行できます。"));
+        return false;
+    }
+
     private void requirePlayer(CommandSender sender, Consumer<Player> action) {
         if (sender instanceof Player player) {
             action.accept(player);
@@ -268,7 +276,13 @@ public final class KanbanChatCommand implements CommandExecutor, TabCompleter {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         if (args.length == 1) {
-            return prefix(List.of("set", "remove", "list", "test", "reload", "on", "off", "status"), args[0]);
+            List<String> subs = new ArrayList<>(List.of("set", "remove", "list", "test", "status"));
+            if (sender.hasPermission("kanbanchat.manage")) {
+                subs.add("reload");
+                subs.add("on");
+                subs.add("off");
+            }
+            return prefix(subs, args[0]);
         }
         String sub = args[0].toLowerCase(Locale.ROOT);
         if (sub.equals("set")) {

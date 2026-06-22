@@ -26,7 +26,7 @@ KanbanChat は、指定した看板の内容を、ログインした各プレイ
 - **看板の指定は 2 方式に両対応**: コマンド（`/kanbanchat set`）とマーカー行（`[login]`）。どちらも同じ `SignRegistry` に入る。
 - **複数看板は order 昇順で連結**（同値は y, x, z 順で安定ソート）。番号はコマンド/マーカーで明示、省略時は `最大+1` で自動採番。
 - **本文はキャッシュが真実源**: 登録/編集時に `signs.yml` へ Component を JSON 保存し、ログイン表示はキャッシュから組み立てる（チャンク非依存・高速）。
-- **マーカー方式は `kanbanchat.admin` を要求**（`SignChangeEvent` 内で権限チェック）。荒らし対策。
+- **権限は 2 段階**: 看板の登録・管理（マーカー方式／`set`・`remove`・`list`・`test`）は `kanbanchat.admin`（`default: true`＝全員可）。`on`・`off`・`reload` などサーバー全体に影響する操作のみ `kanbanchat.manage`（`default: op`）を別途要求（`KanbanChatCommand#requireManage`）。荒らしを絞りたい場合は権限プラグインで `kanbanchat.admin` を個別に剥奪する運用。
 - **表示はログインした本人のチャットのみ**（受信者は「ログインしたそのプレイヤー」＝看板作成者とは無関係。`kanbanchat.see` を持つ全員が各自のログイン時に受け取る。全体ブロードキャストではない）。`join-delay-ticks`（既定 30）だけ遅らせてバニラ参加メッセージの後に出す。
 - 装飾保持のため、行の素テキスト化は `PlainTextComponentSerializer`、保存は `GsonComponentSerializer` を使用。
 

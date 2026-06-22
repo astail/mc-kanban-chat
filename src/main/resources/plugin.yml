@@ -1,5 +1,5 @@
 name: KanbanChat
-version: 1.0.1
+version: 1.1.0
 main: io.github.astail.kanbanchat.KanbanChatPlugin
 description: "指定した看板の内容を、ログインした各プレイヤーのチャットに個別表示する掲示板プラグインです（ログインした全員が対象）。"
 api-version: '26.1.2'

@@ -19,4 +19,7 @@ permissions:
     default: true
   kanbanchat.admin:
     description: "/kanbanchat で看板の登録・管理を行うことを許可します。"
+    default: true
+  kanbanchat.manage:
+    description: "/kanbanchat on|off|reload など、サーバー全体に影響する操作を許可します。"
     default: op

@@ -50,7 +50,7 @@ KanbanChat treats signs as a bulletin board: **write on a sign → it shows on l
 2. Lines 2-4 become the body (the marker line is not included in the message).
 3. To set the order, use `[login:2]` (auto-numbered if omitted).
 
-> Only players with `kanbanchat.admin` can register via the marker method (anti-grief).
+> By default anyone can register signs (both the command and marker methods use `kanbanchat.admin`, default `true`). To prevent griefing, revoke `kanbanchat.admin` from specific players/groups (set it to `false`) with a permissions plugin.
 
 ### Concatenating multiple signs
 
@@ -65,8 +65,9 @@ For long announcements, stack signs vertically and number them `1, 2, 3 …`.
 | `/kanbanchat remove [number]` | Unregister (by number or by looked-at sign) | `kanbanchat.admin` |
 | `/kanbanchat list` | List registered signs | `kanbanchat.admin` |
 | `/kanbanchat test` | Preview the message to yourself | `kanbanchat.admin` |
-| `/kanbanchat reload` | Reload config and signs | `kanbanchat.admin` |
-| `/kanbanchat on \| off \| status` | Enable / disable / show state | `kanbanchat.admin` |
+| `/kanbanchat status` | Show the current state | `kanbanchat.admin` |
+| `/kanbanchat reload` | Reload config and signs | `kanbanchat.manage` |
+| `/kanbanchat on \| off` | Enable / disable | `kanbanchat.manage` |
 
 Alias: `/kc`
 
@@ -75,7 +76,10 @@ Alias: `/kc`
 | Node | Description | Default |
 |---|---|---|
 | `kanbanchat.see` | Receive the login message | `true` (everyone) |
-| `kanbanchat.admin` | Use the management commands | `op` |
+| `kanbanchat.admin` | Register/manage signs (set / remove / list / test & marker method) | `true` (everyone) |
+| `kanbanchat.manage` | Server-wide operations: `on` / `off` / `reload` | `op` |
+
+> If you previously granted `kanbanchat.admin` to moderators and want them to keep on/off/reload, grant `kanbanchat.manage` as well (ops have both by default).
 
 ## Configuration (`config.yml`)
 

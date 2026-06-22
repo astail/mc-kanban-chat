@@ -30,7 +30,7 @@ KanbanChat treats signs as a bulletin board: **write on a sign → it shows on l
 
 ## Installation
 
-1. Drop `KanbanChat-1.0.1.jar` into `plugins/` and restart.
+1. Drop `KanbanChat-1.1.0.jar` into `plugins/` and restart.
 2. Place a sign and register it as a "login sign" with either method below.
 3. When a player logs in, the contents are shown in their own chat (every player who logs in).
 
@@ -109,7 +109,7 @@ Registered signs are stored in `plugins/KanbanChat/signs.yml` (body text is cach
 ## Build
 
 ```bash
-./deploy.sh        # macOS native (JDK 25 + Maven). Output: target/KanbanChat-1.0.1.jar
+./deploy.sh        # macOS native (JDK 25 + Maven). Output: target/KanbanChat-1.1.0.jar
 # or
 mvn -B clean package
 ```
@@ -131,7 +131,7 @@ gh release download --repo astail/mc-kanban-chat --pattern '*.jar'
 
 ### B. Build it yourself
 
-Follow [Build](#build) to produce `target/KanbanChat-1.0.1.jar`.
+Follow [Build](#build) to produce `target/KanbanChat-1.1.0.jar`.
 
 ### Place the jar
 
@@ -139,11 +139,11 @@ Put the jar into the server's `plugins/` and restart.
 
 ```bash
 # Bind mount (copy into the host plugins directory)
-cp target/KanbanChat-1.0.1.jar /path/to/data/plugins/
+cp target/KanbanChat-1.1.0.jar /path/to/data/plugins/
 docker restart <container>
 
 # Named volume etc. (copy directly into the container)
-docker cp target/KanbanChat-1.0.1.jar <container>:/data/plugins/
+docker cp target/KanbanChat-1.1.0.jar <container>:/data/plugins/
 docker restart <container>
 ```
 
@@ -165,13 +165,13 @@ services:
       VERSION: "26.2"
       PAPER_CHANNEL: "experimental"
       PLUGINS: |
-        https://github.com/astail/mc-kanban-chat/releases/download/v1.0.1/KanbanChat-1.0.1.jar
+        https://github.com/astail/mc-kanban-chat/releases/download/v1.1.0/KanbanChat-1.1.0.jar
     volumes:
       - ./data:/data
     restart: unless-stopped
 ```
 
-`PLUGINS` accepts multiple newline-separated URLs. When you bump the version, update `v1.0.1` and the filename in the URL to match the new release.
+`PLUGINS` accepts multiple newline-separated URLs. When you bump the version, update `v1.1.0` and the filename in the URL to match the new release.
 
 You'll know it worked when the startup log shows:
 

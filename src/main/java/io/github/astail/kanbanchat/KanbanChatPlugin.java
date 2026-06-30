@@ -36,6 +36,7 @@ public final class KanbanChatPlugin extends JavaPlugin implements Listener {
     private boolean active;
     private int joinDelayTicks;
     private boolean skipEmptyLines;
+    private String lineSeparator;
 
     @Override
     public void onEnable() {
@@ -79,6 +80,7 @@ public final class KanbanChatPlugin extends JavaPlugin implements Listener {
         active = config.getBoolean("enabled", true);
         joinDelayTicks = Math.max(0, config.getInt("join-delay-ticks", 30));
         skipEmptyLines = config.getBoolean("skip-empty-lines", true);
+        lineSeparator = config.getString("line-separator", "");
 
         List<String> markers = config.getStringList("markers");
         if (markers.isEmpty()) {
@@ -194,16 +196,26 @@ public final class KanbanChatPlugin extends JavaPlugin implements Listener {
 
     // ───────────────────────── 公開ヘルパー ─────────────────────────
 
-    /** 登録看板を order 昇順で連結したメッセージ。1 行も無ければ null。 */
+    /**
+     * 登録看板を order 昇順に「1 枚 = 1 行」で連結したメッセージ。1 枚も無ければ null。
+     * 1 枚の看板に書かれた複数行は {@code line-separator}（既定は区切りなし）で連結して
+     * 改行せず 1 行にまとめ、看板どうしの間だけを改行で区切る。
+     */
     public Component buildMessage() {
-        List<Component> all = new ArrayList<>();
+        JoinConfiguration withinSign = lineSeparator.isEmpty()
+                ? JoinConfiguration.noSeparators()
+                : JoinConfiguration.separator(Component.text(lineSeparator));
+        List<Component> perSign = new ArrayList<>();
         for (SignEntry entry : registry.ordered()) {
-            all.addAll(entry.lines());
+            if (entry.lines().isEmpty()) {
+                continue;
+            }
+            perSign.add(Component.join(withinSign, entry.lines()));
         }
-        if (all.isEmpty()) {
+        if (perSign.isEmpty()) {
             return null;
         }
-        return Component.join(JoinConfiguration.newlines(), all);
+        return Component.join(JoinConfiguration.newlines(), perSign);
     }
 
     /** 空行を取り除いた行リストを返す（skip-empty-lines が false ならそのまま）。 */

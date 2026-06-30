@@ -90,6 +90,7 @@ markers:               # a first line matching one of these auto-registers the s
   - "[login]"
   - "[ログイン]"
 skip-empty-lines: true # drop blank lines from the message
+line-separator: ""     # separator used when joining one sign's lines into a single line (default: none)
 ```
 
 Registered signs are stored in `plugins/KanbanChat/signs.yml` (body text is cached, so the login message shows instantly even if the sign's chunk is unloaded).
@@ -104,6 +105,7 @@ Registered signs are stored in `plugins/KanbanChat/signs.yml` (body text is cach
 ### Limitations
 
 - A Minecraft sign holds 4 lines per side, ~15 characters per line. Use multiple signs for longer text.
+- **The multiple lines of a single sign are joined into one chat line (no line breaks); only different signs are separated by line breaks.** Text wrapped by the sign's narrow width reads continuously in chat. The separator is configurable via `line-separator` (default: none).
 - The marker method uses line 1 as the marker, leaving 3 body lines (command method keeps all 4).
 
 ## Build

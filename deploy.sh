@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # KanbanChat の jar をビルドするだけのスクリプト（Mac ネイティブ / JDK25 + Maven）。
-# 生成物: target/KanbanChat-1.1.0.jar
+# 生成物: target/KanbanChat-1.2.0.jar
 #
 set -euo pipefail
 

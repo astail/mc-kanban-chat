@@ -24,7 +24,7 @@ KanbanChat treats signs as a bulletin board: **write on a sign → it shows on l
 
 ## Requirements
 
-- Server: Paper 26.1.2 (build 69+)
+- Server: Paper 26.2 (experimental channel)
 - Java: 25
 - Clients: vanilla (no mods, server-side only)
 

@@ -10,7 +10,7 @@ KanbanChat は、指定した看板の内容を、ログインした各プレイ
 ## ビルド要件
 
 - Java 25 + Maven。生成物は `KanbanChat-1.2.0.jar`。
-- 唯一の依存は `io.papermc.paper:paper-api:26.1.2.build.69-stable`（provided）。
+- 唯一の依存は `io.papermc.paper:paper-api:26.2.build.40-alpha`（provided）。
 - ローカルビルドは `./deploy.sh`（Homebrew `openjdk@25` を想定）。
 
 ## アーキテクチャ構成
